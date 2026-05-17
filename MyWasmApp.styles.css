@@ -256,7 +256,7 @@ section[b-02vqeaeh11] {
 }
 
 .nav-item[b-02vqeaeh11]  a:hover {
-    background-color: rgba(174, 0, 255, 0.427);
+    background-color: var(--color-primary);
     
     font-weight: bolder;
     text-decoration: underline;
