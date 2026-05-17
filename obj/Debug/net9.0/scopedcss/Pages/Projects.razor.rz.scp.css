@@ -34,7 +34,7 @@ section[b-bp86oil0ym] {
 }
 
 .nav-item[b-bp86oil0ym]  a:hover {
-    background-color: rgba(174, 0, 255, 0.427);
+    background-color: var(--color-primary);
     
     font-weight: bolder;
     text-decoration: underline;
