@@ -248,16 +248,11 @@ section[b-bp86oil0ym] {
     background-color: var(--color-accent); 
 }
 
-.nav-item[b-bp86oil0ym]  a.active {
-    background-color: rgba(255, 0, 0, 0.37);
-    color: rgb(115, 73, 205);
-    font-weight: bolder;
-    text-decoration: underline;
-}
+
 
 .nav-item[b-bp86oil0ym]  a:hover {
-    background-color: rgba(174, 0, 255, 0.427);
-    color: rgb(35, 186, 19);
+    background-color: var (--color-primary);
+    
     font-weight: bolder;
     text-decoration: underline;
 }
