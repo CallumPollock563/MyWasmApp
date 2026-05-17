@@ -17,7 +17,7 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
-    # Publishes the Blazor project
+    # Publishes the Blazor project .
     - name: Publish
       run: dotnet publish MyWasmApp.csproj -c Release -o release --nologo
 
