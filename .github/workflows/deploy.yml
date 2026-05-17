@@ -1,0 +1,36 @@
+name: Deploy to GitHub Pages
+
+# Run workflow on every push to the main branch
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy-to-github-pages:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    # Sets up the .NET SDK
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+
+    # Publishes the Blazor project
+    - name: Publish
+      run: dotnet publish MyWasmApp.csproj -c Release -o release --nologo
+
+    # FIX 1: GitHub Pages ignores folders starting with an underscore (like _framework). This disables that rule.
+    - name: Add .nojekyll file
+      run: touch release/wwwroot/.nojekyll
+
+    # FIX 2: If a user refreshes the page on /Contact, GitHub throws a 404. This tells GitHub to route everything through index.html.
+    - name: Copy index.html to 404.html
+      run: cp release/wwwroot/index.html release/wwwroot/404.html
+
+    # Pushes the compiled website to the gh-pages branch
+    - name: Commit wwwroot to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: release/wwwroot
