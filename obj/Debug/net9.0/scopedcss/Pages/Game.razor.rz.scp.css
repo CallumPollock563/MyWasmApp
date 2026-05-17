@@ -1,0 +1,14 @@
+/* Target the wrapper div to take up the space */
+div[tabindex="0"][b-jfy9hakswy] {
+    display: flex;
+    flex-grow: 1;
+    background-color: var(--color-primary); 
+    min-height: 50vh; /* Fallback baseline height for very small phones */
+}
+
+#gameCanvas[b-jfy9hakswy] {
+    background-color: var(--variant-bg); 
+    width: 100%;
+    height: 100%; /* Automatically fills the flex wrapper */
+    display: block;
+}

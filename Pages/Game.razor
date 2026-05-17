@@ -1,0 +1,136 @@
+@page "/game"
+@using PhysicsEngine
+@implements IAsyncDisposable
+@inject IJSRuntime JSRuntime
+
+<h3>Physics Game</h3>
+
+<div tabindex="0" style="outline:none" @onkeydown="HandleKeyDown" @onkeyup="HandleKeyUp">
+    <canvas id="gameCanvas"></canvas>
+</div>
+
+<p>Gravity Vector - X: @_gravityX | Y: @_gravityY</p>
+
+@code {
+    private List<Circle> _physicsBalls = new();
+    private float _boundaryLeft = 100, _boundaryTop = 100, _boundaryRight = 1200, _boundaryFloor = 800;
+    private double _lastUpdateTimestamp = 0;
+    private float _gravityX = 0, _gravityY = 0;
+    private const float GravityForce = 5f;
+
+    private const float maxTilt = 100f;
+    private DotNetObjectReference<Game>? _dotNetHelper;
+    private HashSet<string> _pressedKeys = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        // Initialize entities
+        _physicsBalls.Add(new Circle(200, 200, 30, 0, 0, 2.25f));
+        _physicsBalls.Add(new Circle(300, 300, 20, 0, 0, 1f));
+        _physicsBalls.Add(new Circle(400, 400, 25, 0, 0, 1.5f));
+
+        await JSRuntime.InvokeVoidAsync("initCanvas");
+        _dotNetHelper = DotNetObjectReference.Create(this);
+        await JSRuntime.InvokeVoidAsync("gameLoop", _dotNetHelper);
+    }
+
+    // JS will now push the new boundaries ONLY when the window is resized
+    [JSInvokable]
+    public void UpdateBoundaries(float width, float height)
+    {
+        _boundaryRight = width - 100;
+        _boundaryFloor = height - 100;
+    }
+
+    private void HandleKeyDown(KeyboardEventArgs e)
+    {
+        _pressedKeys.Add(e.Key);
+        CalculateGravityFromInput();
+    }
+
+    private void HandleKeyUp(KeyboardEventArgs e)
+    {
+        _pressedKeys.Remove(e.Key);
+        CalculateGravityFromInput();
+    }
+
+    private void CalculateGravityFromInput()
+    {
+        // Horizontal Gravity
+        if (_pressedKeys.Contains("ArrowLeft") && _pressedKeys.Contains("ArrowRight")) _gravityX += 0;
+        else if (_pressedKeys.Contains("ArrowLeft")&&_gravityX>-maxTilt) _gravityX -= GravityForce;
+        else if (_pressedKeys.Contains("ArrowRight")&&_gravityX<maxTilt) _gravityX += GravityForce;
+        else _gravityX += 0;
+
+        // Vertical Gravity
+        if (_pressedKeys.Contains("ArrowUp") && _pressedKeys.Contains("ArrowDown")) _gravityY += 0;
+        else if (_pressedKeys.Contains("ArrowUp")&&_gravityY>-maxTilt) _gravityY -= GravityForce;
+        else if (_pressedKeys.Contains("ArrowDown")&&_gravityY<maxTilt) _gravityY += GravityForce;
+        else _gravityY += 0;
+    }
+
+    // Notice this is no longer an async Task! It runs synchronously and extremely fast in WASM.
+    [JSInvokable]
+    public GameState Update(double timestamp)
+    {
+        if (_lastUpdateTimestamp == 0)
+        {
+            _lastUpdateTimestamp = timestamp;
+            return GetCurrentGameState();
+        }
+
+        float deltaTime = (float)((timestamp - _lastUpdateTimestamp) / 1000.0);
+        _lastUpdateTimestamp = timestamp;
+
+        // Step physics for all balls
+        foreach (var ball in _physicsBalls)
+        {
+            ball.UpdatePhysics(_boundaryFloor, _boundaryLeft, _boundaryRight, _boundaryTop, deltaTime, _gravityX, _gravityY);
+        }
+
+        // Handle inter-ball collisions
+        for (int i = 0; i < _physicsBalls.Count; i++)
+        {
+            for (int j = i + 1; j < _physicsBalls.Count; j++)
+            {
+                _physicsBalls[i].ResolveCollision(_physicsBalls[j]);
+            }
+        }
+
+        return GetCurrentGameState();
+    }
+
+    private GameState GetCurrentGameState()
+    {
+        return new GameState
+        {
+            GravityX = _gravityX,
+            GravityY = _gravityY,
+            Balls = _physicsBalls.Select(b => new BallData { X = b.X, Y = b.Y, Radius = b.Radius, Mass = b.Mass })
+        };
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await JSRuntime.InvokeVoidAsync("stopGameLoop");
+        _dotNetHelper?.Dispose();
+    }
+
+    // DTOs (Data Transfer Objects) for clean JSInterop passing
+    public class GameState
+    {
+        public float GravityX { get; set; }
+        public float GravityY { get; set; }
+        public IEnumerable<BallData> Balls { get; set; } = Array.Empty<BallData>();
+    }
+
+    public class BallData
+    {
+        public float X { get; set; }
+        public float Y { get; set; }
+        public float Radius { get; set; }
+        public float Mass { get; set; }
+    }
+}

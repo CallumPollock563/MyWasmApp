@@ -1,0 +1,58 @@
+﻿@inherits LayoutComponentBase
+@inject IJSRuntime JSRuntime
+
+<div class="page-container">
+    @* Container switches classes based on the dark mode state *@
+    <main class="@(_isDarkMode ? "theme-dark" : "theme-light")">
+        <div class="top-navigation-bar">
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">Home</NavLink>
+                </div>
+                <div class="nav-item">
+                    <NavLink class="nav-link" href="CV">CV</NavLink>
+                </div>
+                <div class="nav-item">
+                    <NavLink class="nav-link" href="Projects">Projects</NavLink>
+                </div>
+                <div class="nav-item">
+                    <NavLink class="nav-link" href="Contact">Contact</NavLink>
+                </div>
+
+                <div class="nav-right-section">
+                    <button id="theme-toggle-button" @onclick="ToggleDarkModeAsync">
+                        @(_isDarkMode ? "Light Mode" : "Dark Mode")
+                    </button>
+                </div>
+            </nav>
+        </div>
+
+        <article class="content-body">
+            @Body
+            <div id="app-background"></div>
+        </article>
+    </main>
+</div>
+
+@code {
+    private bool _isDarkMode = false;
+
+    // Check local storage on initialization to restore the user's preferred theme
+    protected override async Task OnInitializedAsync()
+    {
+        var savedThemeValue = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "darkModeEnabled");
+        _isDarkMode = savedThemeValue == "true";
+    }
+
+    // Toggle theme state and persist the choice to local storage
+    private async Task ToggleDarkModeAsync()
+    {
+        _isDarkMode = !_isDarkMode;
+
+        await JSRuntime.InvokeVoidAsync(
+            "localStorage.setItem",
+            "darkModeEnabled",
+            _isDarkMode.ToString().ToLower()
+        );
+    }
+}

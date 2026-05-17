@@ -1,0 +1,41 @@
+section {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap; /* Let the big buttons stack vertically on mobile */
+    
+    
+}
+
+.nav-item {
+    flex-grow: 1;
+    margin: 20px;
+    height: 100px;
+    
+}
+
+.nav-item ::deep a {
+    font-family: monospace;
+    color: var(--text-primary); 
+    border-radius: 4px;
+    height: 100%; 
+    
+    
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the text inside the big block */
+    background-color: var(--color-accent); 
+}
+
+.nav-item ::deep a.active {
+    background-color: rgba(255, 0, 0, 0.37);
+    color: rgb(115, 73, 205);
+    font-weight: bolder;
+    text-decoration: underline;
+}
+
+.nav-item ::deep a:hover {
+    background-color: rgba(174, 0, 255, 0.427);
+    color: rgb(35, 186, 19);
+    font-weight: bolder;
+    text-decoration: underline;
+}

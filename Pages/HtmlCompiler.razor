@@ -1,0 +1,55 @@
+@page "/HtmlCompiler"
+
+<div id="compiler-root">
+    <div id="editor-layout">
+        <div id="editor-left-pane" class="input-container">
+            <textarea placeholder="Enter HTML..." onkeyup="compileHTML(this)"></textarea>
+            <textarea placeholder="Enter CSS..." onkeyup="compileCSS(this)"></textarea>
+        </div>
+
+        <div id="preview-right-pane">
+            <iframe id="preview-frame"></iframe>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Logic kept exactly as original, just moved into scoped context
+    let cachedCssUrl = null;
+
+    function compileCSS(field) {
+        const cssContent = field.value;
+        const blob = new Blob([cssContent], { type: "text/css" });
+
+        if (cachedCssUrl) URL.revokeObjectURL(cachedCssUrl);
+        cachedCssUrl = URL.createObjectURL(blob);
+
+        const iframe = document.getElementById("preview-frame");
+        const doc = iframe.contentDocument || iframe.contentWindow.document;
+        applyCssToIframe(doc);
+    }
+
+    function compileHTML(field) {
+        const iframe = document.getElementById("preview-frame");
+        const doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        doc.open();
+        doc.write(field.value);
+        doc.close();
+
+        applyCssToIframe(doc);
+    }
+
+    function applyCssToIframe(doc) {
+        if (!cachedCssUrl) return;
+
+        let linkElement = doc.getElementById("live-css-link");
+        if (!linkElement) {
+            linkElement = doc.createElement("link");
+            linkElement.id = "live-css-link";
+            linkElement.rel = "stylesheet";
+            doc.head.appendChild(linkElement);
+        }
+        linkElement.href = cachedCssUrl;
+    }
+</script>
