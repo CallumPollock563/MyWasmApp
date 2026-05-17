@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MyWasmApp</title>
+    <base href="/MyWasmApp/" />
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/app.css" />
+    
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link href="MyWasmApp.styles.css" rel="stylesheet" />
+
+    <style>
+
+        html,body{
+            overflow: hidden;
+            height: 100%;
+            margin: 0;
+        }
+        
+        #app{
+            height: 100%;
+        }
+
+
+
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <svg class="loading-progress">
+            <circle r="4%" cx="50%" cy="50%" />
+            <circle r="40%" cx="50%" cy="50%" />
+        </svg>
+        <div class="loading-progress-text"></div>
+    </div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="." class="reload">Reload</a>
+        <span class="dismiss">🗙</span>
+    </div>
+    <script src="_framework/blazor.webassembly.js"></script>
+    
+    
+    <script>
+        let gameCanvas = null;
+        let renderContext = null;
+        let currentTiltX = 0;
+        let currentTiltY = 0;
+        let dotNetGameRef = null; // Store a reference to C#
+
+        function updatePerspectiveTilt(gravityX, gravityY) {
+            currentTiltX = gravityX / 1000;
+            currentTiltY = gravityY / 1000;
+        }
+
+        window.initCanvas = function () {
+            gameCanvas = document.getElementById("gameCanvas");
+            if (!gameCanvas) {
+                console.error("Game canvas element was not found.");
+                return;
+            }
+            renderContext = gameCanvas.getContext("2d");
+            window.addEventListener("resize", handleResize);
+        };
+
+        function handleResize() {
+            if (!gameCanvas) return;
+            const boundingBox = gameCanvas.getBoundingClientRect();
+            const pixelRatio = window.devicePixelRatio || 1;
+
+            gameCanvas.width = boundingBox.width * pixelRatio;
+            gameCanvas.height = boundingBox.height * pixelRatio;
+
+            renderContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+
+            // Push the new canvas size to C# when the window resizes
+            if (dotNetGameRef) {
+                dotNetGameRef.invokeMethodAsync("UpdateBoundaries", gameCanvas.clientWidth, gameCanvas.clientHeight);
+            }
+        }
+
+        let frameRequestId = null;
+        let isGameRunning = false;
+
+        window.gameLoop = function (dotNetHelper) {
+            isGameRunning = true;
+            dotNetGameRef = dotNetHelper;
+            handleResize(); // Trigger an initial boundary sync
+
+            function frameStep(timestamp) {
+                if (!isGameRunning) return;
+
+                // Request the latest math from C#
+                dotNetHelper.invokeMethodAsync("Update", timestamp)
+                    .then(gameState => {
+                        if (gameState && isGameRunning) {
+                            // Draw based on the returned data!
+                            draw(gameState.balls, gameState.gravityX, gameState.gravityY);
+                            frameRequestId = requestAnimationFrame(frameStep);
+                        }
+                    })
+                    .catch(err => {
+                        console.warn("Blazor Update failed, stopping loop:", err);
+                        isGameRunning = false;
+                    });
+            }
+
+            frameRequestId = requestAnimationFrame(frameStep);
+        };
+
+        window.stopGameLoop = function () {
+            isGameRunning = false;
+            if (frameRequestId) cancelAnimationFrame(frameRequestId);
+        };
+
+        function calculatePerspectiveProjection(worldX, worldY) {
+            const centerX = gameCanvas.clientWidth / 2;
+            const centerY = gameCanvas.clientHeight / 2;
+
+            const relX = worldX - centerX;
+            const relY = worldY - centerY;
+
+            const perspectiveIntensity = 0.0025;
+            const scaleFactor = 1 - (relX * currentTiltX + relY * currentTiltY) * perspectiveIntensity;
+
+            return {
+                x: relX * scaleFactor + centerX,
+                y: relY * scaleFactor + centerY,
+                scale: scaleFactor
+            };
+        }
+
+        window.draw = function (entities, gx, gy) {
+            if (!renderContext || !gameCanvas) return;
+
+            updatePerspectiveTilt(gx, gy);
+            const width = gameCanvas.clientWidth;
+            const height = gameCanvas.clientHeight;
+
+            renderContext.clearRect(0, 0, width, height);
+
+            // Boundarie wall
+            const leftBound = 100, topBound = 100;
+            const rightBound = width - 100, bottomBound = height - 100;
+
+            const w1 = calculatePerspectiveProjection(leftBound-30, topBound-30);
+            const w2 = calculatePerspectiveProjection(rightBound+30, topBound-30);
+            const w3 = calculatePerspectiveProjection(rightBound+30, bottomBound+30);
+            const w4 = calculatePerspectiveProjection(leftBound-30, bottomBound+30);
+
+
+            renderContext.fillStyle = "black";
+            renderContext.beginPath();
+            renderContext.moveTo(w1.x, w1.y);
+            renderContext.lineTo(w2.x, w2.y);
+            renderContext.lineTo(w3.x, w3.y);
+            renderContext.lineTo(w4.x, w4.y);
+            renderContext.closePath();
+            renderContext.fill();
+            
+
+            // Background Projection (Pseudo-3D Arena)
+            const p1 = calculatePerspectiveProjection(leftBound, topBound);
+            const p2 = calculatePerspectiveProjection(rightBound, topBound);
+            const p3 = calculatePerspectiveProjection(rightBound, bottomBound);
+            const p4 = calculatePerspectiveProjection(leftBound, bottomBound);
+
+            renderContext.fillStyle = "gray";
+            renderContext.beginPath();
+            renderContext.moveTo(p1.x, p1.y);
+            renderContext.lineTo(p2.x, p2.y);
+            renderContext.lineTo(p3.x, p3.y);
+            renderContext.lineTo(p4.x, p4.y);
+            renderContext.closePath();
+            renderContext.fill();
+
+            // Render Entities
+            for (const ball of entities) {
+                const p = calculatePerspectiveProjection(ball.x, ball.y);
+
+                let ballColor = "green";
+                if (ball.mass < 1.1) ballColor = "red";
+                else if (ball.mass < 2.1) ballColor = "blue";
+
+                renderContext.fillStyle = ballColor;
+                renderContext.beginPath();
+                renderContext.arc(p.x, p.y, ball.radius * p.scale, 0, Math.PI * 2);
+                renderContext.fill();
+            }
+        };
+    </script>
+</body>
+
+</html>

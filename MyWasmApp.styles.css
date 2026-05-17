@@ -1,0 +1,263 @@
+/* /Layout/MainLayout.razor.rz.scp.css */
+/* Light & Dark theme variable definitions remain exactly the same */
+.theme-light[b-xlbimt2ng6] {
+    --base-bg: white;
+    --variant-bg: rgb(208, 208, 208);
+    --text-primary: black;
+    --text-secondary: black;
+    --color-primary: rgb(239, 121, 255);
+    --color-accent: rgb(0, 238, 255);
+}
+
+.theme-dark[b-xlbimt2ng6] {
+    --base-bg: rgb(19, 19, 19);
+    --variant-bg: rgb(39, 39, 39);
+    --text-primary: rgb(255, 255, 255);
+    --text-secondary: rgb(255, 255, 255);
+    --color-primary: rgb(165, 0, 180);
+    --color-accent: rgb(106, 0, 255);
+}
+
+.page-container[b-xlbimt2ng6] {
+    height: 100vh; /* Lock to viewport height */
+    font-size: 1.5rem; /* Scaled down slightly to fit smaller screens better */
+    overflow: hidden; /* We will let the content area scroll instead */
+}
+
+#app-background[b-xlbimt2ng6] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--base-bg);
+}
+
+main[b-xlbimt2ng6] {
+    color: var(--text-primary);
+    background-color: var(--base-bg);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column; /* Turns the app into a vertical flex container */
+}
+
+.top-navigation-bar[b-xlbimt2ng6] {
+    background-color: var(--variant-bg);
+    width: 100%;
+    flex-shrink: 0; /* Prevents the header from being squished */
+}
+
+.nav-menu[b-xlbimt2ng6] {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap; /* Allows links to drop to the next line */
+    position: relative; /* Anchors the absolutely-positioned dark mode button */
+    padding-right: 160px; 
+    padding-bottom: 0.5rem; 
+}
+
+.nav-item[b-xlbimt2ng6] {
+    /* Removed min-width so they can fit naturally */
+    padding-right: 0.5rem;
+    min-width: 200px;
+}
+
+.nav-item[b-xlbimt2ng6]  a {
+    font-family: monospace;
+    color: var(--text-primary);
+    border-radius: 4px;
+    height: 4rem; /* Reduced from 8rem so a 2-line header isn't massive */
+    padding: 0 1rem;
+    margin: 0.5rem 0 0 0.5rem;
+    display: flex;
+    align-items: center;
+    background-color: var(--base-bg);
+}
+
+.nav-item[b-xlbimt2ng6]  a.active {
+    font-weight: bolder;
+    text-decoration: underline;
+}
+
+.nav-right-section[b-xlbimt2ng6] {
+    position: absolute; /* Pins the button to the top right */
+    top: 0.5rem;
+    right: 1rem;
+}
+
+#theme-toggle-button[b-xlbimt2ng6] {
+    outline: none;
+    font-family: monospace;
+    color: var(--text-primary);
+    border-radius: 4px;
+    height: 4rem; 
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    background-color: var(--base-bg);
+    border: none;
+    cursor: pointer;
+}
+
+#theme-toggle-button:hover[b-xlbimt2ng6] {
+    font-weight: bolder;
+    text-decoration: underline;
+}
+
+.content-body[b-xlbimt2ng6] {
+    padding: 20px;
+    flex-grow: 1; /* MAGIC: Automatically fills ALL remaining height perfectly */
+    overflow-y: auto; /* Allows only the content to scroll */
+    background-color: transparent;
+    display: flex;
+    flex-direction: column; /* Passes the dynamic height down to the pages */
+}
+/* /Pages/Contact.razor.rz.scp.css */
+body[b-8qxn25cyhv] {
+    /* Let MainLayout handle the primary background to avoid conflicts */
+    background-color: transparent; 
+    height: 100%;
+}
+
+.flex[b-8qxn25cyhv] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20vh;
+}
+
+
+input[b-8qxn25cyhv], textarea[b-8qxn25cyhv] {
+    background-color: var(--variant-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--color-primary);
+    padding: 10px;
+    margin: 5px;
+    border-radius: 4px;
+    width: 80%;
+    min-width: 200px;
+}
+
+.submit-btn[b-8qxn25cyhv] {
+    background-color: var(--color-primary);
+    color: var(--text-primary);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+/* /Pages/Game.razor.rz.scp.css */
+/* Target the wrapper div to take up the space */
+div[tabindex="0"][b-lxch4azcln] {
+    display: flex;
+    flex-grow: 1;
+    background-color: var(--color-primary); 
+    min-height: 50vh; /* Fallback baseline height for very small phones */
+}
+
+#gameCanvas[b-lxch4azcln] {
+    background-color: var(--variant-bg); 
+    width: 100%;
+    height: 100%; /* Automatically fills the flex wrapper */
+    display: block;
+}
+/* /Pages/HtmlCompiler.razor.rz.scp.css */
+/* Tell the root to fill the flex container provided by MainLayout */
+#compiler-root[b-r4cpvc9fqa] {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; 
+    width: 100%;
+    background-color: var(--color-primary);
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+#editor-layout[b-r4cpvc9fqa] {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    width: 100%;
+    gap: 10px; 
+}
+
+#editor-left-pane[b-r4cpvc9fqa] {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#editor-left-pane textarea[b-r4cpvc9fqa] {
+    flex: 1; /* Makes both textareas share vertical space equally */
+    background-color: var(--variant-bg); 
+    color: var(--text-primary);
+    padding: 10px;
+    resize: none;
+    font-family: monospace;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+}
+
+#preview-right-pane[b-r4cpvc9fqa] {
+    flex: 3;
+    display: flex;
+    background-color: var(--base-bg);
+    border-radius: 4px;
+    overflow: hidden; 
+}
+
+#preview-frame[b-r4cpvc9fqa] {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: white; /* Iframe needs white background to not affect editior */
+}
+/* /Pages/Projects.razor.rz.scp.css */
+section[b-02vqeaeh11] {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap; /* Let the big buttons stack vertically on mobile */
+    
+    
+}
+
+.nav-item[b-02vqeaeh11] {
+    flex-grow: 1;
+    margin: 20px;
+    height: 100px;
+    
+}
+
+.nav-item[b-02vqeaeh11]  a {
+    font-family: monospace;
+    color: var(--text-primary); 
+    border-radius: 4px;
+    height: 100%; 
+    
+    
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the text inside the big block */
+    background-color: var(--color-accent); 
+}
+
+.nav-item[b-02vqeaeh11]  a.active {
+    background-color: rgba(255, 0, 0, 0.37);
+    color: rgb(115, 73, 205);
+    font-weight: bolder;
+    text-decoration: underline;
+}
+
+.nav-item[b-02vqeaeh11]  a:hover {
+    background-color: rgba(174, 0, 255, 0.427);
+    color: rgb(35, 186, 19);
+    font-weight: bolder;
+    text-decoration: underline;
+}
