@@ -19,8 +19,8 @@
 
 .page-container {
     height: 100vh; /* Lock to viewport height */
-    font-size: 1.5rem; /* Scaled down slightly to fit smaller screens better */
-    overflow: hidden; /* We will let the content area scroll instead */
+    font-size: 1.5rem; 
+    overflow: hidden; /* content area will scroll instead */
 }
 
 #app-background {
@@ -40,7 +40,7 @@ main {
     width: 100%;
     height: 100%;
     display: flex;
-    flex-direction: column; /* Turns the app into a vertical flex container */
+    flex-direction: column; 
 }
 
 .top-navigation-bar {
@@ -53,13 +53,13 @@ main {
     width: 100%;
     display: flex;
     flex-wrap: wrap; /* Allows links to drop to the next line */
-    position: relative; /* Anchors the absolutely-positioned dark mode button */
+    position: relative; 
     padding-right: 160px; 
     padding-bottom: 0.5rem; 
 }
 
 .nav-item {
-    /* Removed min-width so they can fit naturally */
+    
     padding-right: 0.5rem;
     min-width: 200px;
 }
@@ -68,7 +68,7 @@ main {
     font-family: monospace;
     color: var(--text-primary);
     border-radius: 4px;
-    height: 4rem; /* Reduced from 8rem so a 2-line header isn't massive */
+    height: 4rem; 
     padding: 0 1rem;
     margin: 0.5rem 0 0 0.5rem;
     display: flex;
@@ -108,9 +108,9 @@ main {
 
 .content-body {
     padding: 20px;
-    flex-grow: 1; /* MAGIC: Automatically fills ALL remaining height perfectly */
+    flex-grow: 1; 
     overflow-y: auto; /* Allows only the content to scroll */
     background-color: transparent;
     display: flex;
-    flex-direction: column; /* Passes the dynamic height down to the pages */
+    flex-direction: column; 
 }
