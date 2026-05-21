@@ -117,7 +117,6 @@ main[b-xlbimt2ng6] {
 }
 /* /Pages/Contact.razor.rz.scp.css */
 body[b-8qxn25cyhv] {
-    /* Let MainLayout handle the primary background to avoid conflicts */
     background-color: transparent; 
     height: 100%;
 }
@@ -128,7 +127,6 @@ body[b-8qxn25cyhv] {
     align-items: center;
     margin-top: 20vh;
 }
-
 
 input[b-8qxn25cyhv], textarea[b-8qxn25cyhv] {
     background-color: var(--variant-bg);
@@ -141,6 +139,13 @@ input[b-8qxn25cyhv], textarea[b-8qxn25cyhv] {
     min-width: 200px;
 }
 
+.action-row[b-8qxn25cyhv] {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
 .submit-btn[b-8qxn25cyhv] {
     background-color: var(--color-primary);
     color: var(--text-primary);
@@ -151,21 +156,11 @@ input[b-8qxn25cyhv], textarea[b-8qxn25cyhv] {
     font-weight: bold;
 }
 
-/* Layout to put the submit button and help icon side-by-side */
-.action-row[b-8qxn25cyhv] {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-top: 10px;
-}
-
-/* Container styling */
 .controls-container[b-8qxn25cyhv] {
     display: flex;
     background-color: transparent;
 }
 
-/* The interactive help indicator */
 .help-tooltip-trigger[b-8qxn25cyhv] {
     position: relative; 
     display: inline-flex;
@@ -181,24 +176,17 @@ input[b-8qxn25cyhv], textarea[b-8qxn25cyhv] {
     font-weight: bold;
 }
 
-/* Hidden state for the tooltip box */
 .help-tooltip-trigger .tooltip-box[b-8qxn25cyhv] {
     visibility: hidden;
     opacity: 0;
     position: absolute;
-    
-    /* Positioned centered above the '?' icon */
     bottom: 130%; 
     left: 50%; 
     transform: translateX(-50%);
-    
-    /* Theme integration */
     width: 200px;
     background-color: var(--variant-bg);
     color: var(--text-primary);
     border: 2px solid var(--color-primary);
-    
-    /* Layout details */
     text-align: center;
     border-radius: 6px;
     padding: 10px;
@@ -207,12 +195,9 @@ input[b-8qxn25cyhv], textarea[b-8qxn25cyhv] {
     line-height: 1.4;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
     z-index: 10;
-    
-    /* Smooth fade-in animation transition */
     transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
 }
 
-/* Little directional arrow beneath the tooltip box */
 .help-tooltip-trigger .tooltip-box[b-8qxn25cyhv]::after {
     content: "";
     position: absolute;
@@ -224,7 +209,6 @@ input[b-8qxn25cyhv], textarea[b-8qxn25cyhv] {
     border-color: var(--color-primary) transparent transparent transparent;
 }
 
-/* Trigger reveal on hover */
 .help-tooltip-trigger:hover .tooltip-box[b-8qxn25cyhv] {
     visibility: visible;
     opacity: 1;
@@ -322,7 +306,6 @@ div[tabindex="0"][b-lxch4azcln] {
     opacity: 1;
 }
 /* /Pages/HtmlCompiler.razor.rz.scp.css */
-/* Tell the root to fill the flex container provided by MainLayout */
 #compiler-root[b-r4cpvc9fqa] {
     display: flex;
     flex-direction: column;
@@ -346,11 +329,11 @@ div[tabindex="0"][b-lxch4azcln] {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    position: relative;
+    position: relative; /* Anchors the absolutely positioned child elements */
 }
 
 #editor-left-pane textarea[b-r4cpvc9fqa] {
-    flex: 1; /* Makes both textareas share vertical space equally */
+    flex: 1; 
     background-color: var(--variant-bg); 
     color: var(--text-primary);
     padding: 10px;
@@ -374,20 +357,18 @@ div[tabindex="0"][b-lxch4azcln] {
     width: 100%;
     height: 100%;
     border: none;
-    background-color: white; /* Iframe needs white background to not affect editior */
+    background-color: white; 
 }
 
-
-/* Container styling to float it over the UI */
+/* Floating Container styling */
 .controls-container[b-r4cpvc9fqa] {
     position: absolute;
-    bottom: 15px; /* Adjust this to move it up or down */
-    left: 15px;   /* Adjust this to move it left or right */
-    z-index: 50;  /* Ensures it sits on top of the textareas */
+    bottom: 15px; 
+    left: 15px;   
+    z-index: 50;  
     background-color: transparent;
 }
 
-/* The interactive help indicator */
 .help-tooltip-trigger[b-r4cpvc9fqa] {
     position: relative; 
     display: inline-flex;
@@ -403,23 +384,16 @@ div[tabindex="0"][b-lxch4azcln] {
     font-weight: bold;
 }
 
-/* Hidden state for the tooltip box */
 .help-tooltip-trigger .tooltip-box[b-r4cpvc9fqa] {
     visibility: hidden;
     opacity: 0;
     position: absolute;
-    
-    /* Positioned perfectly above the '?' icon, anchored left */
     bottom: 130%; 
     left: 0; 
-    
-    /* Theme integration */
     width: 240px;
     background-color: var(--variant-bg);
     color: var(--text-primary);
     border: 2px solid var(--color-primary);
-    
-    /* Layout details */
     text-align: center;
     border-radius: 6px;
     padding: 10px;
@@ -428,17 +402,13 @@ div[tabindex="0"][b-lxch4azcln] {
     line-height: 1.4;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
     z-index: 10;
-    
-    /* Smooth fade-in animation transition */
     transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
 }
 
-/* Little directional arrow beneath the tooltip box */
 .help-tooltip-trigger .tooltip-box[b-r4cpvc9fqa]::after {
     content: "";
     position: absolute;
     top: 100%;
-    /* Align arrow with the center of the 24px '?' trigger */
     left: 12px; 
     margin-left: -6px;
     border-width: 6px;
@@ -446,7 +416,6 @@ div[tabindex="0"][b-lxch4azcln] {
     border-color: var(--color-primary) transparent transparent transparent;
 }
 
-/* Trigger reveal on hover */
 .help-tooltip-trigger:hover .tooltip-box[b-r4cpvc9fqa] {
     visibility: visible;
     opacity: 1;
