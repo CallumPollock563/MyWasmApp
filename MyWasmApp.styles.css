@@ -165,6 +165,15 @@ div[tabindex="0"][b-lxch4azcln] {
     height: 100%; /* Automatically fills the flex wrapper */
     display: block;
 }
+
+#flex[b-lxch4azcln]{
+    display: flex;
+
+}
+
+#help[b-lxch4azcln]{
+    right: 0;
+}
 /* /Pages/HtmlCompiler.razor.rz.scp.css */
 /* Tell the root to fill the flex container provided by MainLayout */
 #compiler-root[b-r4cpvc9fqa] {
