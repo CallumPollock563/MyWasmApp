@@ -22,6 +22,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    position: relative;
 }
 
 #editor-left-pane textarea {
@@ -53,10 +54,12 @@
 }
 
 
-/* Container styling to keep it structured at the bottom */
+/* Container styling to float it over the UI */
 .controls-container {
-    display: flex;
-    padding-top: 5px; /* Slight gap from the CSS textarea */
+    position: absolute;
+    bottom: 15px; /* Adjust this to move it up or down */
+    left: 15px;   /* Adjust this to move it left or right */
+    z-index: 50;  /* Ensures it sits on top of the textareas */
     background-color: transparent;
 }
 
