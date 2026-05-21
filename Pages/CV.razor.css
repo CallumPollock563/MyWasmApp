@@ -1,0 +1,30 @@
+.page-header {
+    margin-bottom: 1.5rem;
+}
+
+.cv-actions {
+    margin-bottom: 20px;
+}
+
+/* Modifies the base submit-btn to behave properly as an anchor link */
+.download-btn {
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+/* Styles the container holding the PDF to match your app's theme */
+.pdf-viewer {
+    width: 100%;
+    height: 75vh;
+    border: 2px solid var(--color-primary);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Forces the iframe to fill its parent container seamlessly */
+.pdf-viewer iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
