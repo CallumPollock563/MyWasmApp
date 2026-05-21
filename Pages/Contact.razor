@@ -4,18 +4,21 @@
 <PageTitle>Contact</PageTitle>
 
 <div class="flex">
+    <input type="text" id="name" placeholder="Full Name" @bind="_name">
+    <input type="email" id="email" placeholder="Email" @bind="_email">
+    <textarea placeholder="Description" @bind="_description"></textarea>
     
-        <input type="text" id="name" placeholder="Full Name" @bind="_name">
-        <input type="email" id="email" placeholder="Email" @bind="_email">
-    
-
-    
-        <textarea placeholder="Description" @bind="_description"></textarea>
-    
-    <div>
+    <!-- Wrapper to keep the button and tooltip inline -->
+    <div class="action-row">
         <button class="submit-btn" @onclick="SubmitFormAsync" disabled="@_isSubmitting">
             @(_isSubmitting ? "SENDING..." : "SUBMIT")
         </button>
+
+        <div class="controls-container">
+            <span class="help-tooltip-trigger">?
+                <span class="tooltip-box">This form securely sends your message directly to my inbox using EmailJS!</span>
+            </span>
+        </div>
     </div>
 
     @* Display success or error messages to the user *@
