@@ -220,6 +220,36 @@ input[b-8qxn25cyhv], textarea[b-8qxn25cyhv] {
     opacity: 1;
 }
 /* /Pages/CV.razor.rz.scp.css */
+.page-header[b-4vjhxkip3c] {
+    margin-bottom: 1.5rem;
+}
+
+.cv-actions[b-4vjhxkip3c] {
+    margin-bottom: 20px;
+}
+
+/* Modifies the base submit-btn to behave properly as an anchor link */
+.download-btn[b-4vjhxkip3c] {
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+/* Styles the container holding the PDF to match your app's theme */
+.pdf-viewer[b-4vjhxkip3c] {
+    width: 100%;
+    height: 75vh;
+    border: 2px solid var(--color-primary);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Forces the iframe to fill its parent container seamlessly */
+.pdf-viewer iframe[b-4vjhxkip3c] {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
 /* /Pages/Game.razor.rz.scp.css */
 /* The wrapper is our anchor point. Position relative means elements inside
    it can be positioned exactly where we want them, like the bottom-left text. */
