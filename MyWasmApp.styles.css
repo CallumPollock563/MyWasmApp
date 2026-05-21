@@ -166,13 +166,81 @@ div[tabindex="0"][b-lxch4azcln] {
     display: block;
 }
 
-#flex[b-lxch4azcln]{
+/* Container styling to keep elements organized */
+.controls-container[b-lxch4azcln] {
     display: flex;
-
+    padding: 10px;
+    background-color: transparent;
 }
 
-#help[b-lxch4azcln]{
-    right: 0;
+.gravity-text[b-lxch4azcln] {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px; /* Smooth spacing between text and the help icon */
+    margin: 0;
+    font-family: sans-serif;
+}
+
+/* The interactive help indicator */
+.help-tooltip-trigger[b-lxch4azcln] {
+    position: relative; /* Anchor point for the child tooltip box */
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    background-color: var(--color-primary, #333);
+    color: white;
+    border-radius: 50%;
+    cursor: help;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Hidden state for the tooltip box */
+.help-tooltip-trigger .tooltip-box[b-lxch4azcln] {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    
+    /* Positioned right above the '?' icon */
+    bottom: 125%; 
+    left: 50%;
+    transform: translateX(-50%);
+    
+    /* Tooltip styling */
+    width: 220px;
+    background-color: #222;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 1.4;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    z-index: 10;
+    
+    /* Smooth fade-in animation transition */
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+}
+
+/* Little arrow beneath the tooltip box */
+.help-tooltip-trigger .tooltip-box[b-lxch4azcln]::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #222 transparent transparent transparent;
+}
+
+/* Trigger reveal on hover */
+.help-tooltip-trigger:hover .tooltip-box[b-lxch4azcln] {
+    visibility: visible;
+    opacity: 1;
 }
 /* /Pages/HtmlCompiler.razor.rz.scp.css */
 /* Tell the root to fill the flex container provided by MainLayout */
