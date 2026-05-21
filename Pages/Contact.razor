@@ -8,7 +8,6 @@
     <input type="email" id="email" placeholder="Email" @bind="_email">
     <textarea placeholder="Description" @bind="_description"></textarea>
     
-    <!-- Wrapper to keep the button and tooltip inline -->
     <div class="action-row">
         <button class="submit-btn" @onclick="SubmitFormAsync" disabled="@_isSubmitting">
             @(_isSubmitting ? "SENDING..." : "SUBMIT")
@@ -21,7 +20,6 @@
         </div>
     </div>
 
-    @* Display success or error messages to the user *@
     @if (!string.IsNullOrEmpty(_statusMessage))
     {
         <div class="status-message" style="margin-top: 20px; font-family: monospace; color: var(--text-primary);">
@@ -40,7 +38,6 @@
 
     private async Task SubmitFormAsync()
     {
-        // Basic validation
         if (string.IsNullOrWhiteSpace(_name) || string.IsNullOrWhiteSpace(_email) || string.IsNullOrWhiteSpace(_description))
         {
             _statusMessage = "Please fill out all fields.";
@@ -52,25 +49,19 @@
         
         try
         {
-            
             await JSRuntime.InvokeVoidAsync("sendEmailJS", _name, _email, _description);
-            
             _statusMessage = "Message sent successfully!";
-            
-            // Clear the form fields
             _name = "";
             _email = "";
             _description = "";
         }
         catch (Exception ex)
         {
-            // If the JS throws an error (e.g., bad credentials, no internet)
             _statusMessage = "Failed to send message. Please try again later.";
             Console.WriteLine($"EmailJS Error: {ex.Message}");
         }
         finally
         {
-            // Re-enable the button
             _isSubmitting = false;
         }
     }
