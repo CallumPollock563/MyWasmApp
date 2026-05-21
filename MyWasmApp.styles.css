@@ -121,11 +121,12 @@ body[b-8qxn25cyhv] {
     height: 100%;
 }
 
+/* Centers the entire form vertically and horizontally */
 .flex[b-8qxn25cyhv] {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20vh;
+    margin-top: 20vh; /* Pushes the form down slightly from the top */
 }
 
 input[b-8qxn25cyhv], textarea[b-8qxn25cyhv] {
@@ -139,10 +140,11 @@ input[b-8qxn25cyhv], textarea[b-8qxn25cyhv] {
     min-width: 200px;
 }
 
+/* Lines up the Submit button and the '?' horizontally */
 .action-row[b-8qxn25cyhv] {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 15px; /* Space between button and icon */
     margin-top: 10px;
 }
 
@@ -161,6 +163,7 @@ input[b-8qxn25cyhv], textarea[b-8qxn25cyhv] {
     background-color: transparent;
 }
 
+/* The round '?' button */
 .help-tooltip-trigger[b-8qxn25cyhv] {
     position: relative; 
     display: inline-flex;
@@ -176,13 +179,14 @@ input[b-8qxn25cyhv], textarea[b-8qxn25cyhv] {
     font-weight: bold;
 }
 
+/* The actual text box that pops up */
 .help-tooltip-trigger .tooltip-box[b-8qxn25cyhv] {
     visibility: hidden;
     opacity: 0;
     position: absolute;
     bottom: 130%; 
     left: 50%; 
-    transform: translateX(-50%);
+    transform: translateX(-50%); /* Centers over the icon */
     width: 200px;
     background-color: var(--variant-bg);
     color: var(--text-primary);
@@ -198,6 +202,7 @@ input[b-8qxn25cyhv], textarea[b-8qxn25cyhv] {
     transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
 }
 
+/* The little downward pointing triangle */
 .help-tooltip-trigger .tooltip-box[b-8qxn25cyhv]::after {
     content: "";
     position: absolute;
@@ -209,6 +214,7 @@ input[b-8qxn25cyhv], textarea[b-8qxn25cyhv] {
     border-color: var(--color-primary) transparent transparent transparent;
 }
 
+/* Hover reveal */
 .help-tooltip-trigger:hover .tooltip-box[b-8qxn25cyhv] {
     visibility: visible;
     opacity: 1;
