@@ -45,7 +45,13 @@
         // Validation: Ensure no fields are left blank before attempting submission
         if (string.IsNullOrWhiteSpace(_name) || string.IsNullOrWhiteSpace(_email) || string.IsNullOrWhiteSpace(_description))
         {
+            
             _statusMessage = "Please fill out all fields.";
+            return;
+        }
+        else if(!_email.Contains("@")||!_email.Contains(".")){
+
+            _statusMessage = "Please enter a valid email";
             return;
         }
 
