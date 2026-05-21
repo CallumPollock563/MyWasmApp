@@ -12,3 +12,12 @@ div[tabindex="0"] {
     height: 100%; /* Automatically fills the flex wrapper */
     display: block;
 }
+
+#flex{
+    display: flex;
+
+}
+
+#help{
+    right: 0;
+}
