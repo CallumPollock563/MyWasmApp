@@ -20,37 +20,43 @@
 </div>
 
 @code {
-    // Game state variables
     private List<Circle> _physicsBalls = new();
     private float _boundaryLeft = 100, _boundaryTop = 100, _boundaryRight = 1200, _boundaryFloor = 800;
     private double _lastUpdateTimestamp = 0;
     
-    // Gravity settings
     private float _gravityX = 0, _gravityY = 0;
     private const float GravityForce = 5f;
-    private const float maxTilt = 100f; // Stops the gravity from getting insanely high
+    private const float MaxTilt = 100f; 
     
-    // Tools for talking to JavaScript
     private DotNetObjectReference<Game>? _dotNetHelper;
-    private HashSet<string> _pressedKeys = new(); // Remembers which keys are currently held down
+    private HashSet<string> _pressedKeys = new();
 
+    
+    /// Invoked after the component has rendered. Initializes the physics entities and securely triggers the JavaScript canvas rendering loop.
+    
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        // Only run this setup once when the page first loads
         if (!firstRender) return;
 
-        // Spawn our starting physics balls
         _physicsBalls.Add(new Circle(200, 200, 30, 0, 0, 2.25f));
         _physicsBalls.Add(new Circle(300, 300, 20, 0, 0, 1f));
         _physicsBalls.Add(new Circle(400, 400, 25, 0, 0, 1.5f));
 
-        // Tell JavaScript to set up the canvas and start requesting animation frames
-        await JSRuntime.InvokeVoidAsync("initCanvas");
-        _dotNetHelper = DotNetObjectReference.Create(this);
-        await JSRuntime.InvokeVoidAsync("gameLoop", _dotNetHelper);
+        try
+        {
+            await JSRuntime.InvokeVoidAsync("initCanvas");
+            _dotNetHelper = DotNetObjectReference.Create(this);
+            await JSRuntime.InvokeVoidAsync("gameLoop", _dotNetHelper);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error initializing canvas JS interop: {ex.Message}");
+        }
     }
 
-    // Called by JS whenever the browser window resizes
+    
+    /// Called via JavaScript interop when the browser window resizes to adjust the physics bounds dynamically.
+    
     [JSInvokable]
     public void UpdateBoundaries(float width, float height)
     {
@@ -58,59 +64,54 @@
         _boundaryFloor = height - 100;
     }
 
-    // Keep track of exactly which keys are currently being held down
     private void HandleKeyDown(KeyboardEventArgs e)
     {
         _pressedKeys.Add(e.Key);
         CalculateGravityFromInput();
     }
 
-    // Remove keys from our list when the user lets go of them
     private void HandleKeyUp(KeyboardEventArgs e)
     {
         _pressedKeys.Remove(e.Key);
         CalculateGravityFromInput();
     }
 
-    // Adjusts gravity based on the arrow keys, capping out at 'maxTilt'
+    
+    /// Calculates gravity vector adjustments based on active keyboard inputs, capped by maximum tilt parameters.
+   
     private void CalculateGravityFromInput()
     {
-        // Horizontal (X) Gravity
         if (_pressedKeys.Contains("ArrowLeft") && _pressedKeys.Contains("ArrowRight")) _gravityX += 0;
-        else if (_pressedKeys.Contains("ArrowLeft") && _gravityX > -maxTilt) _gravityX -= GravityForce;
-        else if (_pressedKeys.Contains("ArrowRight") && _gravityX < maxTilt) _gravityX += GravityForce;
+        else if (_pressedKeys.Contains("ArrowLeft") && _gravityX > -MaxTilt) _gravityX -= GravityForce;
+        else if (_pressedKeys.Contains("ArrowRight") && _gravityX < MaxTilt) _gravityX += GravityForce;
         else _gravityX += 0;
 
-        // Vertical (Y) Gravity
         if (_pressedKeys.Contains("ArrowUp") && _pressedKeys.Contains("ArrowDown")) _gravityY += 0;
-        else if (_pressedKeys.Contains("ArrowUp") && _gravityY > -maxTilt) _gravityY -= GravityForce;
-        else if (_pressedKeys.Contains("ArrowDown") && _gravityY < maxTilt) _gravityY += GravityForce;
+        else if (_pressedKeys.Contains("ArrowUp") && _gravityY > -MaxTilt) _gravityY -= GravityForce;
+        else if (_pressedKeys.Contains("ArrowDown") && _gravityY < MaxTilt) _gravityY += GravityForce;
         else _gravityY += 0;
     }
 
-    // The main game loop. JavaScript calls this 60 times a second.
-    // It is synchronous (no async/await) so it runs as fast as possible.
+    
+    /// The primary synchronous physics loop, called by the JavaScript requestAnimationFrame. 
+    
     [JSInvokable]
     public GameState Update(double timestamp)
     {
-        // On the very first frame, just record the time and bail out
         if (_lastUpdateTimestamp == 0)
         {
             _lastUpdateTimestamp = timestamp;
             return GetCurrentGameState();
         }
 
-        // Calculate how much time passed since the last frame (for smooth physics)
         float deltaTime = (float)((timestamp - _lastUpdateTimestamp) / 1000.0);
         _lastUpdateTimestamp = timestamp;
 
-        // 1. Move all balls based on gravity and speed
         foreach (var ball in _physicsBalls)
         {
             ball.UpdatePhysics(_boundaryFloor, _boundaryLeft, _boundaryRight, _boundaryTop, deltaTime, _gravityX, _gravityY);
         }
 
-        // 2. Check if any balls are hitting each other and bounce them apart
         for (int i = 0; i < _physicsBalls.Count; i++)
         {
             for (int j = i + 1; j < _physicsBalls.Count; j++)
@@ -119,11 +120,9 @@
             }
         }
 
-        // Send the updated positions back to JS so it can draw them
         return GetCurrentGameState();
     }
 
-    // Packages our physics data into a clean object for JS to read
     private GameState GetCurrentGameState()
     {
         return new GameState
@@ -134,14 +133,25 @@
         };
     }
 
-    // Cleanup when the user leaves the page to stop the game loop
+    
+    /// Disposes of asynchronous resources and signals JavaScript to terminate the animation loop to prevent memory leaks.
+    
     public async ValueTask DisposeAsync()
     {
-        await JSRuntime.InvokeVoidAsync("stopGameLoop");
-        _dotNetHelper?.Dispose();
+        try
+        {
+            await JSRuntime.InvokeVoidAsync("stopGameLoop");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error stopping game loop during disposal: {ex.Message}");
+        }
+        finally
+        {
+            _dotNetHelper?.Dispose();
+        }
     }
 
-    // Data Transfer Objects (DTOs) to pass clean data to JavaScript
     public class GameState
     {
         public float GravityX { get; set; }
