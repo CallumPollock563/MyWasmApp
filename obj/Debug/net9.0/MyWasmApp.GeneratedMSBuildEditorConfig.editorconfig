@@ -28,10 +28,6 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Callum/MyWasmApp/Pages/CV.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ1YucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/Callum/MyWasmApp/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -47,6 +43,10 @@ build_metadata.AdditionalFiles.CssScope = b-i1aqog64a0
 [C:/Users/Callum/MyWasmApp/Pages/Contact.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29udGFjdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-j8gdbci1jp
+
+[C:/Users/Callum/MyWasmApp/Pages/CV.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ1YucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-nd4w6cwch7
 
 [C:/Users/Callum/MyWasmApp/Pages/Game.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcR2FtZS5yYXpvcg==
