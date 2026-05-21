@@ -1,90 +1,80 @@
-/* Target the wrapper div to take up the space */
 div[tabindex="0"] {
     display: flex;
     flex-grow: 1;
     background-color: var(--color-primary); 
-    min-height: 50vh; /* Fallback baseline height for very small phones */
+    min-height: 50vh;
 }
 
 #gameCanvas {
     background-color: var(--variant-bg); 
     width: 100%;
-    height: 100%; /* Automatically fills the flex wrapper */
+    height: 100%; 
     display: block;
 }
 
-/* Container styling to keep elements organized */
 .controls-container {
     display: flex;
-    padding: 10px;
+    padding: 10px 0;
     background-color: transparent;
 }
 
 .gravity-text {
     display: inline-flex;
     align-items: center;
-    gap: 8px; /* Smooth spacing between text and the help icon */
+    gap: 12px;
     margin: 0;
-    font-family: sans-serif;
+    color: var(--text-primary);
+    font-size: 1.25rem;
 }
 
-/* The interactive help indicator */
 .help-tooltip-trigger {
-    position: relative; /* Anchor point for the child tooltip box */
+    position: relative;
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 20px;
-    height: 20px;
-    background-color: var(--color-primary, #333);
-    color: white;
+    width: 24px;
+    height: 24px;
+    background-color: var(--color-primary);
+    color: var(--base-bg);
     border-radius: 50%;
     cursor: help;
     font-size: 14px;
     font-weight: bold;
 }
 
-/* Hidden state for the tooltip box */
 .help-tooltip-trigger .tooltip-box {
     visibility: hidden;
     opacity: 0;
     position: absolute;
-    
-    /* Positioned right above the '?' icon */
-    bottom: 125%; 
+    bottom: 130%; 
     left: 50%;
     transform: translateX(-50%);
-    
-    /* Tooltip styling */
-    width: 220px;
-    background-color: #222;
-    color: #fff;
+    width: 240px;
+    background-color: var(--variant-bg);
+    color: var(--text-primary);
+    border: 2px solid var(--color-primary);
     text-align: center;
     border-radius: 6px;
-    padding: 8px;
-    font-size: 12px;
+    padding: 10px;
+    font-size: 1rem;
     font-weight: normal;
     line-height: 1.4;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
     z-index: 10;
-    
-    /* Smooth fade-in animation transition */
     transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
 }
 
-/* Little arrow beneath the tooltip box */
 .help-tooltip-trigger .tooltip-box::after {
     content: "";
     position: absolute;
     top: 100%;
     left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
+    margin-left: -6px;
+    border-width: 6px;
     border-style: solid;
-    border-color: #222 transparent transparent transparent;
+    border-color: var(--color-primary) transparent transparent transparent;
 }
 
-/* Trigger reveal on hover */
 .help-tooltip-trigger:hover .tooltip-box {
     visibility: visible;
     opacity: 1;

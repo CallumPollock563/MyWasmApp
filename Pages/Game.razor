@@ -13,7 +13,7 @@
     <p class="gravity-text">
         Gravity Vector - X: @_gravityX | Y: @_gravityY
         <span class="help-tooltip-trigger">?
-            <span class="tooltip-box">Tilt the board using your keyboard arrow keys to cause the balls to roll</span>
+            <span class="tooltip-box">Tilt the board using your keyboard arrow keys to alter the physics!</span>
         </span>
     </p> 
 </div>
@@ -43,7 +43,6 @@
         await JSRuntime.InvokeVoidAsync("gameLoop", _dotNetHelper);
     }
 
-    // JS will now push the new boundaries ONLY when the window is resized
     [JSInvokable]
     public void UpdateBoundaries(float width, float height)
     {
@@ -65,20 +64,17 @@
 
     private void CalculateGravityFromInput()
     {
-        // Horizontal Gravity
         if (_pressedKeys.Contains("ArrowLeft") && _pressedKeys.Contains("ArrowRight")) _gravityX += 0;
-        else if (_pressedKeys.Contains("ArrowLeft")&&_gravityX>-maxTilt) _gravityX -= GravityForce;
-        else if (_pressedKeys.Contains("ArrowRight")&&_gravityX<maxTilt) _gravityX += GravityForce;
+        else if (_pressedKeys.Contains("ArrowLeft") && _gravityX > -maxTilt) _gravityX -= GravityForce;
+        else if (_pressedKeys.Contains("ArrowRight") && _gravityX < maxTilt) _gravityX += GravityForce;
         else _gravityX += 0;
 
-        // Vertical Gravity
         if (_pressedKeys.Contains("ArrowUp") && _pressedKeys.Contains("ArrowDown")) _gravityY += 0;
-        else if (_pressedKeys.Contains("ArrowUp")&&_gravityY>-maxTilt) _gravityY -= GravityForce;
-        else if (_pressedKeys.Contains("ArrowDown")&&_gravityY<maxTilt) _gravityY += GravityForce;
+        else if (_pressedKeys.Contains("ArrowUp") && _gravityY > -maxTilt) _gravityY -= GravityForce;
+        else if (_pressedKeys.Contains("ArrowDown") && _gravityY < maxTilt) _gravityY += GravityForce;
         else _gravityY += 0;
     }
 
-    // Notice this is no longer an async Task! It runs synchronously and extremely fast in WASM.
     [JSInvokable]
     public GameState Update(double timestamp)
     {
@@ -91,13 +87,11 @@
         float deltaTime = (float)((timestamp - _lastUpdateTimestamp) / 1000.0);
         _lastUpdateTimestamp = timestamp;
 
-        // Step physics for all balls
         foreach (var ball in _physicsBalls)
         {
             ball.UpdatePhysics(_boundaryFloor, _boundaryLeft, _boundaryRight, _boundaryTop, deltaTime, _gravityX, _gravityY);
         }
 
-        // Handle inter-ball collisions
         for (int i = 0; i < _physicsBalls.Count; i++)
         {
             for (int j = i + 1; j < _physicsBalls.Count; j++)
@@ -125,7 +119,6 @@
         _dotNetHelper?.Dispose();
     }
 
-    // DTOs (Data Transfer Objects) for clean JSInterop passing
     public class GameState
     {
         public float GravityX { get; set; }
