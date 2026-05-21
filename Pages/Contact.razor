@@ -36,8 +36,13 @@
     private bool _isSubmitting = false;
     private string _statusMessage = "";
 
+    
+    /// Validates form inputs and asynchronously submits the contact data to EmailJS via JavaScript interop.
+    /// Manages the UI submission state and gracefully handles network or interop exceptions.
+    
     private async Task SubmitFormAsync()
     {
+        // Validation: Ensure no fields are left blank before attempting submission
         if (string.IsNullOrWhiteSpace(_name) || string.IsNullOrWhiteSpace(_email) || string.IsNullOrWhiteSpace(_description))
         {
             _statusMessage = "Please fill out all fields.";
@@ -49,7 +54,10 @@
         
         try
         {
+            // Attempt to forward the data to the EmailJS service
             await JSRuntime.InvokeVoidAsync("sendEmailJS", _name, _email, _description);
+            
+            // Clear the form fields upon successful transmission
             _statusMessage = "Message sent successfully!";
             _name = "";
             _email = "";
@@ -57,11 +65,13 @@
         }
         catch (Exception ex)
         {
+            // Error Handling: Provide user-friendly feedback if the external service fails
             _statusMessage = "Failed to send message. Please try again later.";
             Console.WriteLine($"EmailJS Error: {ex.Message}");
         }
         finally
         {
+            // Always unlock the submit button regardless of success or failure
             _isSubmitting = false;
         }
     }
