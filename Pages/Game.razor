@@ -9,9 +9,13 @@
     <canvas id="gameCanvas"></canvas>
 </div>
 
-<div flex>
-<p>Gravity Vector - X: @_gravityX | Y: @_gravityY</p> 
-<p id="help">?</p>
+<div class="controls-container">
+    <p class="gravity-text">
+        Gravity Vector - X: @_gravityX | Y: @_gravityY
+        <span class="help-tooltip-trigger">?
+            <span class="tooltip-box">Tilt the board using your keyboard arrow keys to cause the balls to roll</span>
+        </span>
+    </p> 
 </div>
 
 @code {
