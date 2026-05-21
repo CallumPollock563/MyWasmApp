@@ -2,6 +2,7 @@
 
 <div id="compiler-root">
     <div id="editor-layout">
+        
         <div id="editor-left-pane" class="input-container">
             <textarea placeholder="Enter HTML..." onkeyup="compileHTML(this)"></textarea>
             <textarea placeholder="Enter CSS..." onkeyup="compileCSS(this)"></textarea>
@@ -16,45 +17,60 @@
         <div id="preview-right-pane">
             <iframe id="preview-frame"></iframe>
         </div>
+        
     </div>
 </div>
 
 <script>
+    // Holds the URL to our dynamically generated CSS file
     let cachedCssUrl = null;
 
+    // Triggered every time the user types in the CSS box
     function compileCSS(field) {
         const cssContent = field.value;
+        
+        // Turn the raw text into an actual 'file' in the browser's memory
         const blob = new Blob([cssContent], { type: "text/css" });
 
+        // Clean up the old file to prevent memory leaks, then save the new one
         if (cachedCssUrl) URL.revokeObjectURL(cachedCssUrl);
         cachedCssUrl = URL.createObjectURL(blob);
 
+        // Tell the iframe to grab the new styles
         const iframe = document.getElementById("preview-frame");
         const doc = iframe.contentDocument || iframe.contentWindow.document;
         applyCssToIframe(doc);
     }
 
+    // Triggered every time the user types in the HTML box
     function compileHTML(field) {
         const iframe = document.getElementById("preview-frame");
         const doc = iframe.contentDocument || iframe.contentWindow.document;
 
+        // Wipe the iframe clean, inject the new HTML, and close the stream
         doc.open();
         doc.write(field.value);
         doc.close();
 
+        // Since wiping the iframe also wipes out our CSS link, we have to reapply it
         applyCssToIframe(doc);
     }
 
+    // Injects our generated CSS file into the iframe's <head>
     function applyCssToIframe(doc) {
         if (!cachedCssUrl) return;
 
         let linkElement = doc.getElementById("live-css-link");
+        
+        // If the <link> tag doesn't exist yet, create it
         if (!linkElement) {
             linkElement = doc.createElement("link");
             linkElement.id = "live-css-link";
             linkElement.rel = "stylesheet";
             doc.head.appendChild(linkElement);
         }
+        
+        // Update the link to point to our newest generated CSS file
         linkElement.href = cachedCssUrl;
     }
 </script>

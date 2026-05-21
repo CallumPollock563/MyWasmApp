@@ -1,10 +1,15 @@
-div[tabindex="0"] {
+/* The wrapper is our anchor point. Position relative means elements inside
+   it can be positioned exactly where we want them, like the bottom-left text. */
+.game-wrapper {
+    position: relative; 
     display: flex;
-    flex-grow: 1;
+    flex-grow: 1; /* Stretch to fill the screen */
     background-color: var(--color-primary); 
     min-height: 50vh;
+    outline: none; /* Hides the default blue focus ring when clicking the game */
 }
 
+/* The actual drawing board */
 #gameCanvas {
     background-color: var(--variant-bg); 
     width: 100%;
@@ -12,43 +17,54 @@ div[tabindex="0"] {
     display: block;
 }
 
+/* Pulls the text out of the standard flow and pins it to the bottom left */
 .controls-container {
-    display: flex;
-    padding: 10px 0;
+    position: absolute;
+    bottom: 15px; 
+    left: 15px;   
+    z-index: 50;  /* Ensures it floats on top of the moving balls */
     background-color: transparent;
 }
 
 .gravity-text {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
+    gap: 12px; /* Space between the text and the '?' icon */
     margin: 0;
     color: var(--text-primary);
     font-size: 1.25rem;
+    
+    /* Adds a slight dark shadow so the text is still readable if balls go behind it */
+    text-shadow: 0px 1px 3px rgba(0,0,0,0.5); 
 }
 
+/* The round '?' button */
 .help-tooltip-trigger {
-    position: relative;
+    position: relative; /* This tells the tooltip box to anchor to THIS specific icon */
     display: inline-flex;
     justify-content: center;
     align-items: center;
     width: 24px;
     height: 24px;
-    background-color: var(--color-primary);
-    color: var(--base-bg);
+    background-color: var(--color-primary); 
+    color: var(--base-bg); 
     border-radius: 50%;
     cursor: help;
     font-size: 14px;
     font-weight: bold;
+    text-shadow: none; /* Don't shadow the '?' text */
 }
 
+/* The actual text box that pops up */
 .help-tooltip-trigger .tooltip-box {
-    visibility: hidden;
+    visibility: hidden; /* Hidden by default */
     opacity: 0;
     position: absolute;
+    
+    /* Anchored to the left side so it doesn't get cut off by the screen edge */
     bottom: 130%; 
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0; 
+    
     width: 240px;
     background-color: var(--variant-bg);
     color: var(--text-primary);
@@ -61,20 +77,24 @@ div[tabindex="0"] {
     line-height: 1.4;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
     z-index: 10;
+    
+    /* Makes it fade in smoothly instead of snapping into view */
     transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
 }
 
+/* The little downward pointing triangle on the bottom of the tooltip */
 .help-tooltip-trigger .tooltip-box::after {
     content: "";
     position: absolute;
     top: 100%;
-    left: 50%;
+    left: 12px; /* Shifts the triangle to line up exactly with the 24px '?' icon */
     margin-left: -6px;
     border-width: 6px;
     border-style: solid;
     border-color: var(--color-primary) transparent transparent transparent;
 }
 
+/* When the user hovers over the '?', show the tooltip */
 .help-tooltip-trigger:hover .tooltip-box {
     visibility: visible;
     opacity: 1;
