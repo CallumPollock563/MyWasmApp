@@ -1,60 +1,119 @@
 /* /Layout/MainLayout.razor.rz.scp.css */
-
-
-
-.nav-links[b-xlbimt2ng6] {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
+/* Light & Dark theme variable definitions remain exactly the same */
+.theme-light[b-xlbimt2ng6] {
+    --base-bg: white;
+    --variant-bg: rgb(208, 208, 208);
+    --text-primary: black;
+    --text-secondary: black;
+    --color-primary: rgb(239, 121, 255);
+    --color-accent: rgb(0, 238, 255);
 }
 
-/* Hide the hamburger button by default on PC */
-.hamburger-btn[b-xlbimt2ng6] {
-    display: none;
-    background: none;
-    border: none;
+.theme-dark[b-xlbimt2ng6] {
+    --base-bg: rgb(19, 19, 19);
+    --variant-bg: rgb(39, 39, 39);
+    --text-primary: rgb(255, 255, 255);
+    --text-secondary: rgb(255, 255, 255);
+    --color-primary: rgb(165, 0, 180);
+    --color-accent: rgb(106, 0, 255);
+}
+
+.page-container[b-xlbimt2ng6] {
+    height: 100vh; /* Lock to viewport height */
+    font-size: 1.5rem; 
+    overflow: hidden; /* content area will scroll instead */
+}
+
+#app-background[b-xlbimt2ng6] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--base-bg);
+}
+
+main[b-xlbimt2ng6] {
     color: var(--text-primary);
-    font-size: 2rem;
-    cursor: pointer;
-    padding: 0.5rem 1rem;
-    margin-top: 0.5rem;
+    background-color: var(--base-bg);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column; 
 }
 
-/* MOBILE MEDIA QUERY */
-@media (max-width: 768px) {
-    .hamburger-btn[b-xlbimt2ng6] {
-        display: block; /* Show the button on mobile */
-    }
+.top-navigation-bar[b-xlbimt2ng6] {
+    background-color: var(--variant-bg);
+    width: 100%;
+    flex-shrink: 0; /* Prevents the header from being squished */
+}
 
-    .nav-links[b-xlbimt2ng6] {
-        display: none; /* Hide the links by default on mobile */
-        flex-direction: column;
-        width: 100%;
-        padding-bottom: 0.5rem;
-    }
+.nav-menu[b-xlbimt2ng6] {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap; /* Allows links to drop to the next line */
+    position: relative; 
+    padding-right: 160px; 
+    padding-bottom: 0.5rem; 
+}
 
+.nav-item[b-xlbimt2ng6] {
     
-    .nav-links.show[b-xlbimt2ng6] {
-        display: flex; 
-    }
+    padding-right: 0.5rem;
+    min-width: 200px;
+}
 
-    /* Force the items to take full width of the screen */
-    .nav-item[b-xlbimt2ng6] {
-        width: 100%;
-        min-width: unset;
-        padding-right: 0;
-    }
-    
-    /* Slight adjustment to spacing so the stack looks clean */
-    .nav-item[b-xlbimt2ng6]  a {
-        margin: 0.25rem 0.5rem;
-        height: 3.5rem; 
-    }
+.nav-item[b-xlbimt2ng6]  a {
+    font-family: monospace;
+    color: var(--text-primary);
+    border-radius: 4px;
+    height: 4rem; 
+    padding: 0 1rem;
+    margin: 0.5rem 0 0 0.5rem;
+    display: flex;
+    align-items: center;
+    background-color: var(--base-bg);
+}
 
-    /* Adjust padding to prevent the theme button from overlapping */
-    .nav-menu[b-xlbimt2ng6] {
-        padding-right: 140px; 
-    }
+.nav-item[b-xlbimt2ng6]  a.active {
+    font-weight: bolder;
+    text-decoration: underline;
+}
+
+.nav-right-section[b-xlbimt2ng6] {
+    position: absolute; /* Pins the button to the top right */
+    top: 0.5rem;
+    right: 1rem;
+}
+
+#theme-toggle-button[b-xlbimt2ng6] {
+    outline: none;
+    font-family: monospace;
+    color: var(--text-primary);
+    border-radius: 4px;
+    height: 4rem; 
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    background-color: var(--base-bg);
+    border: none;
+    cursor: pointer;
+}
+
+#theme-toggle-button:hover[b-xlbimt2ng6] {
+    font-weight: bolder;
+    text-decoration: underline;
+}
+
+.content-body[b-xlbimt2ng6] {
+    padding: 20px;
+    flex-grow: 1; 
+    overflow-y: auto; /* Allows only the content to scroll */
+    background-color: transparent;
+    display: flex;
+    flex-direction: column; 
 }
 /* /Pages/Contact.razor.rz.scp.css */
 body[b-8qxn25cyhv] {
