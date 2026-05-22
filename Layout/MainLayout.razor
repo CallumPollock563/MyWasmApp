@@ -6,17 +6,26 @@
     <main class="@(_isDarkMode ? "theme-dark" : "theme-light")">
         <div class="top-navigation-bar">
             <nav class="nav-menu">
-                <div class="nav-item">
-                    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">Home</NavLink>
-                </div>
-                <div class="nav-item">
-                    <NavLink class="nav-link" href="CV">CV</NavLink>
-                </div>
-                <div class="nav-item">
-                    <NavLink class="nav-link" href="Projects">Projects</NavLink>
-                </div>
-                <div class="nav-item">
-                    <NavLink class="nav-link" href="Contact">Contact</NavLink>
+                
+                <!-- NEW: Hamburger Button (Hidden on Desktop) -->
+                <button class="hamburger-btn" @onclick="ToggleNavMenu">
+                    ☰
+                </button>
+
+                <!-- NEW: Links wrapper that toggles the "show" class on mobile -->
+                <div class="nav-links @(_isNavMenuOpen ? "show" : "")">
+                    <div class="nav-item">
+                        <NavLink class="nav-link" href="" Match="NavLinkMatch.All" @onclick="CloseNavMenu">Home</NavLink>
+                    </div>
+                    <div class="nav-item">
+                        <NavLink class="nav-link" href="CV" @onclick="CloseNavMenu">CV</NavLink>
+                    </div>
+                    <div class="nav-item">
+                        <NavLink class="nav-link" href="Projects" @onclick="CloseNavMenu">Projects</NavLink>
+                    </div>
+                    <div class="nav-item">
+                        <NavLink class="nav-link" href="Contact" @onclick="CloseNavMenu">Contact</NavLink>
+                    </div>
                 </div>
 
                 <div class="nav-right-section">
@@ -36,6 +45,7 @@
 
 @code {
     private bool _isDarkMode = false;
+    private bool _isNavMenuOpen = false; // NEW: Tracks hamburger state
 
     // Check local storage on initialization to restore the user's preferred theme
     protected override async Task OnInitializedAsync()
@@ -54,5 +64,20 @@
             "darkModeEnabled",
             _isDarkMode.ToString().ToLower()
         );
+    }
+
+    // NEW: Toggles the mobile menu
+    private void ToggleNavMenu()
+    {
+        _isNavMenuOpen = !_isNavMenuOpen;
+    }
+
+    // NEW: Closes the mobile menu when a link is clicked
+    private void CloseNavMenu()
+    {
+        if (_isNavMenuOpen)
+        {
+            _isNavMenuOpen = false;
+        }
     }
 }
