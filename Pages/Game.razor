@@ -2,8 +2,13 @@
 @using PhysicsEngine
 @implements IAsyncDisposable
 @inject IJSRuntime JSRuntime
-
+<div class="controls-container">
 <h3>Physics Game</h3>
+<!-- Button required by iOS Safari to allow reading the gyroscope -->
+        <button class="btn btn-sm btn-primary" @onclick="EnableMobileTilt" style="margin-top: 10px;">
+            Enable Mobile Tilt (iOS)
+        </button>
+</div>
 
 <div class="game-wrapper" tabindex="0" @onkeydown="HandleKeyDown" @onkeyup="HandleKeyUp">
     <canvas id="gameCanvas"></canvas>
@@ -17,10 +22,7 @@
                 <span class="tooltip-box">PC: Click the window and use arrow keys. Mobile: Tap Enable Tilt below!</span>
             </span>
         </p> 
-        <!-- Button required by iOS Safari to allow reading the gyroscope -->
-        <button class="btn btn-sm btn-primary" @onclick="EnableMobileTilt" style="margin-top: 10px;">
-            Enable Mobile Tilt (iOS)
-        </button>
+        
     </div>
 </div>
 
