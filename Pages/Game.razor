@@ -10,12 +10,17 @@
     
     <div class="controls-container">
         <p class="gravity-text">
-            Gravity Vector - X: @_gravityX | Y: @_gravityY
+            <!-- Used Math.Round to make the UI text cleaner when dealing with precise tilt floats -->
+            Gravity Vector - X: @Math.Round(_gravityX) | Y: @Math.Round(_gravityY)
             
             <span class="help-tooltip-trigger">?
-                <span class="tooltip-box">Click on the game window then tilt the board using your keyboard arrow keys to see the balls roll</span>
+                <span class="tooltip-box">PC: Click the window and use arrow keys. Mobile: Tap Enable Tilt below!</span>
             </span>
         </p> 
+        <!-- Button required by iOS Safari to allow reading the gyroscope -->
+        <button class="btn btn-sm btn-primary" @onclick="EnableMobileTilt" style="margin-top: 10px;">
+            Enable Mobile Tilt (iOS)
+        </button>
     </div>
 </div>
 
@@ -31,9 +36,6 @@
     private DotNetObjectReference<Game>? _dotNetHelper;
     private HashSet<string> _pressedKeys = new();
 
-    
-    /// Invoked after the component has rendered. Initializes the physics entities and securely triggers the JavaScript canvas rendering loop.
-    
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!firstRender) return;
@@ -54,9 +56,12 @@
         }
     }
 
-    
-    /// Called via JavaScript interop when the browser window resizes to adjust the physics bounds dynamically.
-    
+    private async Task EnableMobileTilt()
+    {
+        // Triggers the browser permission prompt for DeviceOrientation
+        await JSRuntime.InvokeVoidAsync("requestTiltPermission");
+    }
+
     [JSInvokable]
     public void UpdateBoundaries(float width, float height)
     {
@@ -75,9 +80,6 @@
         _pressedKeys.Remove(e.Key);
         CalculateGravityFromInput();
     }
-
-    
-    /// Calculates gravity vector adjustments based on active keyboard inputs, capped by maximum tilt parameters.
    
     private void CalculateGravityFromInput()
     {
@@ -91,13 +93,25 @@
         else if (_pressedKeys.Contains("ArrowDown") && _gravityY < MaxTilt) _gravityY += GravityForce;
         else _gravityY += 0;
     }
-
     
-    /// The primary synchronous physics loop, called by the JavaScript requestAnimationFrame. 
-    
+    // UPDATED: Now receives tilt data (gamma/beta) directly from the JavaScript frame request
     [JSInvokable]
-    public GameState Update(double timestamp)
+    public GameState Update(double timestamp, float gamma, float beta, bool tiltActive)
     {
+        // Apply phone tilt ONLY if there are no keys currently being pressed. (Keyboard takes priority).
+        if (tiltActive && _pressedKeys.Count == 0)
+        {
+            // Gamma (left/right) maxes out around 90, Beta (front/back) maxes out around 180.
+            // We clamp it at 45 degrees so the player doesn't have to hold the phone entirely vertical.
+            float clampAngle = 45f;
+            
+            float clampedGamma = Math.Clamp(gamma, -clampAngle, clampAngle);
+            float clampedBeta = Math.Clamp(beta, -clampAngle, clampAngle);
+
+            _gravityX = (clampedGamma / clampAngle) * MaxTilt;
+            _gravityY = (clampedBeta / clampAngle) * MaxTilt;
+        }
+
         if (_lastUpdateTimestamp == 0)
         {
             _lastUpdateTimestamp = timestamp;
@@ -132,9 +146,6 @@
             Balls = _physicsBalls.Select(b => new BallData { X = b.X, Y = b.Y, Radius = b.Radius, Mass = b.Mass })
         };
     }
-
-    
-    /// Disposes of asynchronous resources and signals JavaScript to terminate the animation loop to prevent memory leaks.
     
     public async ValueTask DisposeAsync()
     {
