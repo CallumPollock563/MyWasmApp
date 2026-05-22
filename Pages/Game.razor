@@ -6,23 +6,30 @@
 <h3>Physics Game</h3>
 
 <div class="game-wrapper" tabindex="0" @onkeydown="HandleKeyDown" @onkeyup="HandleKeyUp">
-    <canvas id="gameCanvas"></canvas>
-    
+    <canvas id="gameCanvas"></canvas>  
+
+
     <div class="controls-container">
         <p class="gravity-text">
-            <!-- Used Math.Round to make the UI text cleaner when dealing with precise tilt floats -->
-            Gravity Vector - X: @Math.Round(_gravityX) | Y: @Math.Round(_gravityY)
+            <!-- Pc only -->
+            <span class="desktop-only">
+                Gravity Vector - X: @Math.Round(_gravityX) | Y: @Math.Round(_gravityY)
+            </span>
             
             <span class="help-tooltip-trigger">?
-                <span class="tooltip-box">PC: Click the window and use arrow keys. Android: Tilt. IOS: Tap Enable Tilt below</span>
-            </span>
+                    <span class="tooltip-box">PC: Click the window and use arrow keys. Android: Tilt. IOS: Tap Enable Tilt below</span>
+                </span>
         </p> 
-        <!-- Button required by iOS Safari to allow reading the gyroscope -->
-        <button class="btn btn-sm btn-primary" @onclick="EnableMobileTilt" style="margin-top: 10px;">
-            Enable Mobile Tilt (iOS)
+        
+        <!-- Moblie Only -->
+        <button class="btn btn-sm btn-primary mobile-only" @onclick="EnableMobileTilt">
+            Tilt (iOS)
         </button>
     </div>
 </div>
+
+
+
 
 @code {
     private List<Circle> _physicsBalls = new();
