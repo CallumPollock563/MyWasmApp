@@ -310,8 +310,7 @@ input[b-8qxn25cyhv], textarea[b-8qxn25cyhv] {
     border: none;
 }
 /* /Pages/Game.razor.rz.scp.css */
-/* The wrapper is our anchor point. Position relative means elements inside
-   it can be positioned exactly where we want them, like the bottom-left text. */
+
 .game-wrapper[b-lxch4azcln] {
     position: relative; 
     display: flex;
@@ -341,7 +340,7 @@ input[b-8qxn25cyhv], textarea[b-8qxn25cyhv] {
 .gravity-text[b-lxch4azcln] {
     display: inline-flex;
     align-items: center;
-    gap: 12px; /* Space between the text and the '?' icon */
+    gap: 12px; /* Space between the text and the ?  */
     margin: 0;
     color: var(--text-primary);
     font-size: 1.25rem;
@@ -350,9 +349,9 @@ input[b-8qxn25cyhv], textarea[b-8qxn25cyhv] {
     text-shadow: 0px 1px 3px rgba(0,0,0,0.5); 
 }
 
-/* The round '?' button */
+/* The round ? button */
 .help-tooltip-trigger[b-lxch4azcln] {
-    position: relative; /* This tells the tooltip box to anchor to THIS specific icon */
+    position: relative; 
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -364,7 +363,7 @@ input[b-8qxn25cyhv], textarea[b-8qxn25cyhv] {
     cursor: help;
     font-size: 14px;
     font-weight: bold;
-    text-shadow: none; /* Don't shadow the '?' text */
+    text-shadow: none; 
 }
 
 /* The actual text box that pops up */
@@ -399,17 +398,45 @@ input[b-8qxn25cyhv], textarea[b-8qxn25cyhv] {
     content: "";
     position: absolute;
     top: 100%;
-    left: 12px; /* Shifts the triangle to line up exactly with the 24px '?' icon */
+    left: 12px; /* Shifts the triangle to line up exactly with the 24px ?  */
     margin-left: -6px;
     border-width: 6px;
     border-style: solid;
     border-color: var(--color-primary) transparent transparent transparent;
 }
 
-/* When the user hovers over the '?', show the tooltip */
+/* When the user hovers over the ? show the tooltip */
 .help-tooltip-trigger:hover .tooltip-box[b-lxch4azcln] {
     visibility: visible;
     opacity: 1;
+}
+
+/* --- DESKTOP  (Default) --- */
+
+/* Hide the iOS button on PC */
+.mobile-only[b-lxch4azcln] {
+    display: none !important;
+}
+
+/* Ensure the gravity text shows on PC */
+.desktop-only[b-lxch4azcln] {
+    display: inline; 
+}
+
+
+/* --- MOBILE OVERRIDES --- */
+@media (max-width: 768px) {
+    
+    /* Show the iOS button on mobile */
+    .mobile-only[b-lxch4azcln] {
+        display: block !important;
+        margin-top: 10px;
+    }
+
+    /* Hide the Gravity X/Y text on mobile */
+    .desktop-only[b-lxch4azcln] {
+        display: none !important;
+    }
 }
 /* /Pages/HtmlCompiler.razor.rz.scp.css */
 /* Main wrapper ensuring the compiler fills the screen */
