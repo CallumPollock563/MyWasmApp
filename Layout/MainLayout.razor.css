@@ -117,6 +117,7 @@ main {
 
 
 
+/* --- DESKTOP FIRST (Default) --- */
 
 .nav-links {
     display: flex;
@@ -124,9 +125,9 @@ main {
     width: 100%;
 }
 
-/* Hide the hamburger button by default on PC */
+/* Force hide the hamburger button by default on PC */
 .hamburger-btn {
-    display: none;
+    display: none !important; 
     background: none;
     border: none;
     color: var(--text-primary);
@@ -136,10 +137,10 @@ main {
     margin-top: 0.5rem;
 }
 
-/* MOBILE  */
+/* --- MOBILE OVERRIDES --- */
 @media (max-width: 768px) {
     .hamburger-btn {
-        display: block; /* Show the button on mobile */
+        display: block !important; /* Force show the button on mobile */
     }
 
     .nav-links {
