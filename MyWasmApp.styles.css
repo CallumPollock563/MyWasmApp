@@ -118,6 +118,7 @@ main[b-xlbimt2ng6] {
 
 
 
+/* --- DESKTOP FIRST (Default) --- */
 
 .nav-links[b-xlbimt2ng6] {
     display: flex;
@@ -125,9 +126,9 @@ main[b-xlbimt2ng6] {
     width: 100%;
 }
 
-/* Hide the hamburger button by default on PC */
+/* Force hide the hamburger button by default on PC */
 .hamburger-btn[b-xlbimt2ng6] {
-    display: none;
+    display: none !important; 
     background: none;
     border: none;
     color: var(--text-primary);
@@ -137,10 +138,10 @@ main[b-xlbimt2ng6] {
     margin-top: 0.5rem;
 }
 
-/* MOBILE  */
+/* --- MOBILE OVERRIDES --- */
 @media (max-width: 768px) {
     .hamburger-btn[b-xlbimt2ng6] {
-        display: block; /* Show the button on mobile */
+        display: block !important; /* Force show the button on mobile */
     }
 
     .nav-links[b-xlbimt2ng6] {
