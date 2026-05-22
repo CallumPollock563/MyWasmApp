@@ -115,6 +115,64 @@ main[b-xlbimt2ng6] {
     display: flex;
     flex-direction: column; 
 }
+
+
+
+
+.nav-links[b-xlbimt2ng6] {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+/* Hide the hamburger button by default on PC */
+.hamburger-btn[b-xlbimt2ng6] {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    margin-top: 0.5rem;
+}
+
+/* MOBILE  */
+@media (max-width: 768px) {
+    .hamburger-btn[b-xlbimt2ng6] {
+        display: block; /* Show the button on mobile */
+    }
+
+    .nav-links[b-xlbimt2ng6] {
+        display: none; /* Hide the links by default on mobile */
+        flex-direction: column;
+        width: 100%;
+        padding-bottom: 0.5rem;
+    }
+
+    /* Blazor will add this class when _isNavMenuOpen is true */
+    .nav-links.show[b-xlbimt2ng6] {
+        display: flex; 
+    }
+
+    /* Force the items to take full width of the screen */
+    .nav-item[b-xlbimt2ng6] {
+        width: 100%;
+        min-width: unset;
+        padding-right: 0;
+    }
+    
+    /* Slight adjustment to spacing so the stack looks clean */
+    .nav-item[b-xlbimt2ng6]  a {
+        margin: 0.25rem 0.5rem;
+        height: 3.5rem; 
+    }
+
+    /* Adjust padding to prevent the theme button from overlapping */
+    .nav-menu[b-xlbimt2ng6] {
+        padding-right: 140px; 
+    }
+}
 /* /Pages/Contact.razor.rz.scp.css */
 body[b-8qxn25cyhv] {
     background-color: transparent; 
